@@ -22,7 +22,7 @@ In addition to a vanilla delay, `AuditoryFeedback` also adds some pink noise to 
 
 ## Usage Note
 
-The delays specificed using `audio.set_delay(delay)` don't account for the intrinsic system delay (from hardware, OS, etc.). It's improssible for me to say what those will be for any given setup, so you'll have to measure this on your own system by recording the mic input and sound card output on the same clock. The measured delay when `audio.delay == 0` is the system delay.
+The delays specificed using `audio.set_delay(delay)` don't account for the intrinsic system delay (from hardware, OS, etc.). It's impossible for me to say what those will be for any given setup, so you'll have to measure this on your own system by recording the mic input and sound card output on the same clock. The measured delay when `audio.delay == 0` is the system delay.
 
 For reference, a Dell Precision Tower 5810 running Ubuntu 16.04 LTS clocks in at a little over 18 milliseconds delay between input and output using onboard audio and JACK/ALSA. The same machine using a Creative Sound Blaster Audigy 4 acheives a only modest speed boost, clocking in at 12.4 milliseconds. So there can be a benefit to using a specialized audio interface like the Audigy, but onboard audio hardware can sometimes perform [comparably to the hardware regularly used in speech motor control/feedback alteration research](https://doi.org/10.1044/2020_JSLHR-19-00419). Your CPU can also cause a bit of a bottleneck, since processing speed affords smaller audio buffer sizes, which directly affects latency. Our Precision 5810 is still chugging along nicely, but it's pretty old and you may be able to do better. The world is your oyster. 
 
