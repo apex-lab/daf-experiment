@@ -14,7 +14,7 @@ _instances = [] # store RTBox instances
 
 import numpy as np
 from pynput import keyboard
-try: import serFTDI; use_serFTDI = serFTDI.Accessible()
+try: from . import serFTDI; use_serFTDI = serFTDI.Accessible()
 except: use_serFTDI = False
 if not use_serFTDI: 
     try: del serFTDI

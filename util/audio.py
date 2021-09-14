@@ -23,7 +23,7 @@ class AuditoryFeedback:
 
 	def __init__(self, 
 		input_chnl = 0,
-		speech_gain = 10., noise_gain = .2, 
+		speech_gain = 10., noise_gain = 0., 
 		driver = 'jack'
 		):
 		'''

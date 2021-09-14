@@ -13,13 +13,12 @@ def present(win, sentence):
 	win.flip()
 
 
-def wait_for_keypress(win, message = False):
+def wait_for_keypress(win, message = ''):
 	'''
 	Wait until subject presses spacebar.
 	'''
 	if message:
-		txt = "Press the spacebar to continue."
-		present(win, txt)
+		present(win, message)
 	event.waitKeys(keyList = ["space"]) # wait until subject responds
 
 def ask_whether_delay(win):
