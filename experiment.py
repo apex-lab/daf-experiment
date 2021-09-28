@@ -1,37 +1,45 @@
 from collections import OrderedDict
 from sys import stdout
-import numpy as np 
+import numpy as np
+from time import time
 
 from util.events import EventMarker
 from util.audio import AuditoryFeedback
 from util.ui import (
 	fixation_cross,
 	display,
-	wait_for_keypress, 
+	wait_for_keypress,
 	ask_whether_delay
 	)
+from util.write import TSVWriter
 from util import load_harvard_sentences
 from psychopy.visual import Window
 
 # specify block design
 BLOCKS = OrderedDict()
-BLOCKS['baseline'] = (50, 0) # n_trials, milliseconds delay
-BLOCKS['first random'] = (50, None) # None denotes random delay
-BLOCKS['adaption'] = (50, 200)
-BLOCKS['second random'] = (50, None)
+BLOCKS['baseline'] = (5, 0) # n_trials, milliseconds delay
+BLOCKS['random1'] = (0, None) # None denotes random delay
+BLOCKS['adaption'] = (0, 200)
+BLOCKS['random2'] = (0, None)
 
 # initialize some things
 subj_num = input("Enter subject number: ")
+subj_num = int(subj_num)
+log = TSVWriter(subj_num)
 np.random.seed(subj_num)
 sentences = load_harvard_sentences(randomize = True)
 marker = EventMarker()
 audio = AuditoryFeedback()
 win = Window(
-	size = (1920, 1080), 
-	screen = 1,
-	units = "norm", 
-	fullscr = True, 
-	pos = (0, 0))
+	size = (1920, 1080),
+	screen = -1,
+	units = "norm",
+	fullscr = False,
+	pos = (0, 0),
+	allowGUI = False
+	)
+
+t1 = time()
 
 ########################
 # instructions
@@ -43,12 +51,12 @@ In this experiment, you will be asked to read sentences out loud.
 wait_for_keypress(win, txt)
 txt = '''
 On each trial, you will press the spacebar to begin.
-A sentence to read will then appear on screen after a brief
-fixation period.
+A sentence will then appear on the screen after a brief
+fixation period; please read it immediately.
 '''
 wait_for_keypress(win, txt)
 txt = '''
-Please read the full sentence out loud as soon as you see it,
+Please start reading the sentence out loud as soon as you see it,
 and then press the spacebar as soon as you have finshed reading.
 (but not sooner).
 '''
@@ -59,8 +67,8 @@ After each trial, you will be asked if you perceived any such delay.
 '''
 wait_for_keypress(win, txt)
 txt = '''
-Please be silent between sentences/trials. We are recording your 
-brain activity during speech as well as silence, 
+Please be silent between sentences/trials. We are recording your
+brain activity during speech as well as silence,
 and both are equally crucial to the experiment.
 '''
 wait_for_keypress(win, txt)
@@ -81,7 +89,9 @@ wait_for_keypress(win, txt)
 ########################
 for block_code in BLOCKS:
 
+	t2 = time()
 	print("\nBeginning %s block\n"%block_code)
+	print("It's been %d minutes since the experiment started."%((t2 - t1)/60))
 	des = BLOCKS[block_code]
 	n_trials = des[0]
 
@@ -93,19 +103,24 @@ for block_code in BLOCKS:
 
 		# keep experimenter in the loop via console
 		stdout.write("\rTrial {0:03d}".format(trial) + "/%d"%n_trials)
-		stdout.flush() 
-		
+		stdout.flush()
+
 		# now actually run the trial
 		wait_for_keypress(win, message = 'Press spacebar to continue.')
-		fixation_cross(win)
 		audio.set_delay(delay)
+		fixation_cross(win)
 		display(win, sentence) # flips screen
-		marker.send(delay)
+		marker.send(trial) # mark with trial number
+		log.write(block_code, trial, delay, sentence)
 		wait_for_keypress(win)
-		marker.send(256) # end trial
+		marker.send(127) # end trial
 		detected_delay = ask_whether_delay(win)
-		resp_tag = 251 if detected_delay else 252
+		resp_tag = 125 if detected_delay else 126
 		marker.send(resp_tag)
+
+t2 = time()
+print('Experiment Complete.')
+print('The experiment took %d minutes.'%((t2 - t1)/60))
 
 ##########################
 # and we're done!

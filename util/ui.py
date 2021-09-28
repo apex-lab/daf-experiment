@@ -12,6 +12,8 @@ def present(win, sentence):
 	msg.draw()
 	win.flip()
 
+def display(win, sentences):
+	present(win, sentences)
 
 def wait_for_keypress(win, message = ''):
 	'''
@@ -37,20 +39,11 @@ def ask_whether_delay(win):
 def fixation_cross(win):
 	'''
 	Displays a fixation cross for a random amount of time between
-	200 and 500 milliseconds. 
+	200 and 400 milliseconds.
 	'''
 	background = visual.Rect(win, width = 2, height = 2, color = "black")
-	fixation = visual.GratingStim(
-		win = win, 
-		size = 0.5, 
-		pos = [0,0], 
-		sf = 0, 
-		rgb = -1
-		)
+	fixation = visual.TextStim(win, text = '+', color = "white", pos = (0,0))
 	background.draw()
 	fixation.draw()
 	win.flip()
-	sleep(np.random.uniform(.2, .5))
-
-
-
+	sleep(np.random.uniform(.2, .4))
