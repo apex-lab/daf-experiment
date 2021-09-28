@@ -28,13 +28,3 @@ def load_harvard_sentences(randomize = True):
 	# flatten sentence list again now that shuffling is done
 	sentences = [sentence for l in lists for sentence in l]
 	return sentences
-
-
-
-
-
-
-
-
-
-	

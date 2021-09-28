@@ -3,6 +3,7 @@ from sys import stdout
 import numpy as np
 from time import time
 
+from util import load_harvard_sentences
 from util.events import EventMarker
 from util.audio import AuditoryFeedback
 from util.ui import (
@@ -12,7 +13,6 @@ from util.ui import (
 	ask_whether_delay
 	)
 from util.write import TSVWriter
-from util import load_harvard_sentences
 from psychopy.visual import Window
 
 # specify block design
@@ -38,7 +38,6 @@ win = Window(
 	pos = (0, 0),
 	allowGUI = False
 	)
-
 t1 = time()
 
 ########################
