@@ -17,10 +17,10 @@ from psychopy.visual import Window
 
 # specify block design
 BLOCKS = OrderedDict()
-BLOCKS['baseline'] = (5, 0) # n_trials, milliseconds delay
-BLOCKS['random1'] = (0, None) # None denotes random delay
-BLOCKS['adaption'] = (0, 200)
-BLOCKS['random2'] = (0, None)
+BLOCKS['baseline'] = (20, 0) # n_trials, milliseconds delay
+BLOCKS['random1'] = (50, None) # None denotes random delay
+BLOCKS['adaption'] = (80, 200)
+BLOCKS['random2'] = (50, None)
 
 # initialize some things
 subj_num = input("Enter subject number: ")
@@ -97,7 +97,7 @@ for block_code in BLOCKS:
 	for trial in range(n_trials):
 
 		# decide what to do this trial
-		delay = np.random.randint(0, 251) if des[1] is None else des[1]
+		delay = np.random.randint(0, 300) if des[1] is None else des[1]
 		sentence = sentences.pop(0)
 
 		# keep experimenter in the loop via console
@@ -109,8 +109,8 @@ for block_code in BLOCKS:
 		audio.set_delay(delay)
 		fixation_cross(win)
 		display(win, sentence) # flips screen
-		marker.send(trial) # mark with trial number
-		log.write(block_code, trial, delay, sentence)
+		marker.send(trial + 1) # mark with trial number, 1-indexed
+		log.write(block_code, trial + 1, delay, sentence)
 		wait_for_keypress(win)
 		marker.send(127) # end trial
 		detected_delay = ask_whether_delay(win)
