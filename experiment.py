@@ -97,7 +97,7 @@ for block_code in BLOCKS:
 	for trial in range(n_trials):
 
 		# decide what to do this trial
-		delay = np.random.randint(0, 300) if des[1] is None else des[1]
+		delay = np.random.randint(0, 250) if des[1] is None else des[1]
 		sentence = sentences.pop(0)
 
 		# keep experimenter in the loop via console
