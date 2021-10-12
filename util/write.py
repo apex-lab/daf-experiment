@@ -10,7 +10,7 @@ class TSVWriter:
             os.makedirs(dir)
         fpath = os.path.join(dir, 'subject%d.tsv'%subj_num)
         self._f = open(fpath, 'w')
-        self._f.write('trial_type\ttrial\t\delay\tsentence')
+        self._f.write('trial_type\ttrial\tdelay\tsentence')
 
     def write(self, block_name, trial_num, delay, stimulus):
         '''
