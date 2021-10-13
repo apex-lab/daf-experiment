@@ -117,6 +117,7 @@ for block_code in BLOCKS:
 		resp_tag = 125 if detected_delay else 126
 		marker.send(resp_tag)
 
+marker.close()
 t2 = time()
 print('Experiment Complete.')
 print('The experiment took %d minutes.'%((t2 - t1)/60))
