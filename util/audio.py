@@ -25,7 +25,7 @@ class AuditoryFeedback:
 	def __init__(self,
 		input_chnl = 0,
 		speech_gain = 10., noise_gain = 0.,
-		driver = 'jack', fs = 48000, buffer = 32,
+		driver = None, fs = None, buffer = None,
 		record = False,
 		**kwargs  # for miscellaneous pyo server args
 		):
