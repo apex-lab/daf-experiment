@@ -9,7 +9,7 @@ def revbits(n):
 	Pin assignments on RTBox are also shifted by one relative to
 	most receiving ports, so we do that too.
 
-	Input is just an int 
+	Input is just an int
 	'''
 	bin_str = bin(n)[2:]
 	k = len(bin_str)
@@ -17,7 +17,7 @@ def revbits(n):
 		bin_str = (8 - k) * '0' + bin_str
 	else:
 		raise ValueError(
-			"Brain Products only takes 7-bit ints (0<n<128)" + 
+			"Brain Products only takes 7-bit ints (0<n<128)" +
 			" from RTBox (since pin assignments aren't aligned)."
 			)
 	return int(bin_str[::-1], 2) >> 1 # reverse and shift by one
@@ -31,14 +31,17 @@ class EventMarker:
 	the RTBox API is just as easy.
 	'''
 
-	def __init__(self, reverse_bits = True):
+	def __init__(self, reverse_bits = True, test_mode = False):
 		'''
 		reverse_bits (bool): whether to reverse the 8-bit event code,
 		as is necessary for Brainvision Triggerbox to read correctly
 		over parallel port (since pin assignments are opposite of RTBox).
 		'''
 		self._revbits = reverse_bits
-		self.box = Box()
+		if test_mode:
+			self.box = Box(boxID = None)
+		else:
+			self.box = Box()
 
 	def send(self, event_code):
 		'''
@@ -56,7 +59,3 @@ class EventMarker:
 		(you'll get a serial port conflict down the line)
 		'''
 		self.box.close()
-
-
-
-

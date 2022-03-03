@@ -1,6 +1,7 @@
-from pyo import SDelay, Input, PinkNoise, Sig, Server
+from pyo import SDelay, Input, PinkNoise, Sig, Server, Record, Clean_objects
 from sys import platform
 import warnings
+import datetime
 
 class AuditoryFeedback:
 	'''
@@ -24,7 +25,9 @@ class AuditoryFeedback:
 	def __init__(self,
 		input_chnl = 0,
 		speech_gain = 10., noise_gain = 0.,
-		driver = 'jack', fs = 48000, buffer = 32
+		driver = 'jack', fs = 48000, buffer = 32,
+		record = False,
+		**kwargs  # for miscellaneous pyo server args
 		):
 		'''
 		Initializes audio input->output graph with an initial delay of zero,
@@ -49,8 +52,14 @@ class AuditoryFeedback:
 				Server may not boot properly, causing sound not to play.
 				'''
 				)
-		self.server = Server(sr = fs, audio = driver,
-							buffersize = buffer, nchnls = 2).boot().start()
+		if fs is not None:
+			kwargs['sr'] = fs
+		if driver is not None:
+			kwargs['audio'] = driver
+		if buffer is not None:
+			kwargs['buffersize'] = buffer
+		if driver is None:
+			self.server = Server(nchnls = 2, **kwargs).boot().start()
 
 		## set up real-time audio processing graph
 		self._mic = Input(chnl = input_chnl)
@@ -64,7 +73,20 @@ class AuditoryFeedback:
 		# and begin
 		self._out.out()
 
+		# set streams to record to wav files
+		if record:
+			t = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
+			self.in_rec = Record(self._mic, filename = 'input_%s.wav'%t)
+			self.out_rec = Record(self._out, filename = 'output_%s.wav'%t)
+			self._record = True
+		else:
+			self._record = False
+
+
 	def stop(self):
+		if self._record: # end recordings
+			clean = Clean_objects(.0, self.in_rec, self.out_rec)
+			clean.start()
 		self._out.stop()
 
 	def set_delay(self, t):
@@ -93,3 +115,6 @@ class AuditoryFeedback:
 	@property
 	def noise_gain(self):
 		return self._noise_gain.value
+
+	def __del__(self):
+		self.stop()

@@ -15,6 +15,8 @@ from util.ui import (
 from util.write import TSVWriter
 from psychopy.visual import Window
 
+# some config stuff
+SEND_TRIGGERS = True # set to false to disable TTL triggers
 # specify block design
 BLOCKS = OrderedDict()
 BLOCKS['baseline'] = (20, 0) # n_trials, milliseconds delay
@@ -28,7 +30,7 @@ subj_num = int(subj_num)
 log = TSVWriter(subj_num)
 np.random.seed(subj_num)
 sentences = load_harvard_sentences(randomize = True)
-marker = EventMarker()
+marker = EventMarker(test_mode = SEND_TRIGGERS)
 audio = AuditoryFeedback()
 win = Window(
 	size = (1920, 1080),
