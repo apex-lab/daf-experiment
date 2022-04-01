@@ -1,5 +1,6 @@
 from pyo import SDelay, Input, PinkNoise, Sig, Server, Record, Clean_objects
 from sys import platform
+from os.path import join
 import warnings
 import datetime
 
@@ -75,8 +76,8 @@ class AuditoryFeedback:
 		# set streams to record to wav files
 		if record:
 			t = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
-			self.in_rec = Record(self._mic, filename = 'input_%s.wav'%t)
-			self.out_rec = Record(self._out, filename = 'output_%s.wav'%t)
+			self.in_rec = Record(self._mic, filename = join('logs', 'input_%s.wav'%t))
+			self.out_rec = Record(self._out, filename = join('logs', 'output_%s.wav'%t))
 			self._record = True
 		else:
 			self._record = False

@@ -19,7 +19,7 @@ from psychopy.visual import Window
 SEND_TRIGGERS = False # set to false to disable TTL triggers
 # specify block design
 BLOCKS = OrderedDict()
-BLOCKS['baseline'] = (20, 0) # n_trials, milliseconds delay
+BLOCKS['baseline'] = (20, 0) # n_trials, milliseconds added delay
 BLOCKS['random1'] = (50, None) # None denotes random delay
 BLOCKS['adaption'] = (80, 200)
 BLOCKS['random2'] = (50, None)
@@ -31,7 +31,7 @@ log = TSVWriter(subj_num)
 np.random.seed(subj_num)
 sentences = load_harvard_sentences(randomize = True)
 marker = EventMarker(test_mode = SEND_TRIGGERS)
-audio = AuditoryFeedback(record = True)
+audio = AuditoryFeedback(fs = 44100, buffer = 32, record = True)
 win = Window(
 	size = (1920, 1080),
 	screen = -1,
@@ -120,6 +120,7 @@ for block_code in BLOCKS:
 		marker.send(resp_tag)
 
 marker.close()
+audio.stop()
 t2 = time()
 print('Experiment Complete.')
 print('The experiment took %d minutes.'%((t2 - t1)/60))
