@@ -1,4 +1,4 @@
-name: daf
+name: daf-experiment
 channels:
 - conda-forge
 dependencies:

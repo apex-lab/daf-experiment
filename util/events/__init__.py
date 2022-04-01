@@ -38,7 +38,7 @@ class EventMarker:
 		over parallel port (since pin assignments are opposite of RTBox).
 		'''
 		self._revbits = reverse_bits
-		if test_mode:
+		if not test_mode:
 			self.box = Box(boxID = None)
 		else:
 			self.box = Box()

@@ -58,8 +58,7 @@ class AuditoryFeedback:
 			kwargs['audio'] = driver
 		if buffer is not None:
 			kwargs['buffersize'] = buffer
-		if driver is None:
-			self.server = Server(nchnls = 2, **kwargs).boot().start()
+		self.server = Server(nchnls = 2, **kwargs).boot().start()
 
 		## set up real-time audio processing graph
 		self._mic = Input(chnl = input_chnl)
