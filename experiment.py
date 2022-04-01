@@ -2,6 +2,7 @@ from collections import OrderedDict
 from sys import stdout
 import numpy as np
 from time import time
+import datetime
 
 from util import load_harvard_sentences
 from util.events import EventMarker
@@ -110,14 +111,24 @@ for block_code in BLOCKS:
 		wait_for_keypress(win, message = 'Press spacebar to continue.')
 		audio.set_delay(delay)
 		fixation_cross(win)
+		start_t = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
 		display(win, sentence) # flips screen
 		marker.send(trial + 1) # mark with trial number, 1-indexed
-		log.write(block_code, trial + 1, delay, sentence)
 		wait_for_keypress(win)
+		end_t = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
 		marker.send(127) # end trial
 		detected_delay = ask_whether_delay(win)
 		resp_tag = 125 if detected_delay else 126
 		marker.send(resp_tag)
+		log.write(
+			block_code,
+			trial + 1,
+			delay,
+			sentence,
+			detected_delay,
+			start_t,
+			end_t
+		)
 
 marker.close()
 audio.stop()
